@@ -3,7 +3,7 @@
 wpa - WordPress Production Analyzer
 
 Usage:
-    wpa <path>                            Interactive guided setup (default)
+    wpa <path>                            Interactive guided setup + saves wpa-report-*.txt
     wpa setup       <path>                Same as above (explicit)
     wpa install                           Install as 'wpa' to /usr/local/bin
     wpa info        <path>                WP version, DB config, themes, plugins
@@ -19,6 +19,7 @@ Examples:
     wpa disk /var/www/html
 """
 
+import datetime
 import os
 import re
 import sys
@@ -47,6 +48,27 @@ _DEFAULT_IGNORED = {
     "wp-content/backups", "wp-content/upgrade", "wp-content/wflogs",
     "wp-content/blogs.dir", "wp-includes", "wp-admin",
 }
+
+
+# ---------------------------------------------------------------------------
+# Tee: write to terminal + file simultaneously
+# ---------------------------------------------------------------------------
+
+class _Tee:
+    def __init__(self, file):
+        self._file = file
+        self._stdout = sys.stdout
+
+    def write(self, data):
+        self._stdout.write(data)
+        self._file.write(data)
+
+    def flush(self):
+        self._stdout.flush()
+        self._file.flush()
+
+    def isatty(self):
+        return self._stdout.isatty()
 
 
 # ---------------------------------------------------------------------------
@@ -398,7 +420,21 @@ def _test_ssh(host: str):
 
 def cmd_setup(root: Path):
     """Interactive guided flow: info → large-file scan → gitignore → remote → deploy key → push."""
+    stamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+    report_path = Path.cwd() / f"wpa-report-{stamp}.txt"
+    report_file = open(report_path, "w", encoding="utf-8")
+    sys.stdout = _Tee(report_file)
 
+    try:
+        _cmd_setup_inner(root)
+    finally:
+        sys.stdout = report_file._stdout
+        report_file.close()
+
+    print(f"\n  Report saved: {report_path}")
+
+
+def _cmd_setup_inner(root: Path):
     # 1. Info
     step(1, 5, "WordPress Analysis")
     cmd_info(root)
