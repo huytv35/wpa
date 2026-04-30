@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # wpa installer
-# Usage: bash <(curl -fsSL https://raw.githubusercontent.com/YOURUSER/YOURREPO/main/install.sh)
+# Usage: bash <(curl -fsSL https://raw.githubusercontent.com/huytv35/wpa/main/install.sh)
 
 set -euo pipefail
 
-RAW_URL="https://raw.githubusercontent.com/YOURUSER/YOURREPO/main/wp-source.py"
+RAW_URL="https://raw.githubusercontent.com/huytv35/wpa/main/wp-source.py"
 INSTALL_PATH="/usr/local/bin/wpa"
 
 # Download
