@@ -60,8 +60,10 @@ class _Tee:
         self._stdout = sys.stdout
 
     def write(self, data):
-        self._stdout.write(data)
-        self._file.write(data)
+        # Sanitize surrogate chars from filenames with invalid bytes
+        safe = data.encode("utf-8", errors="replace").decode("utf-8")
+        self._stdout.write(safe)
+        self._file.write(safe)
 
     def flush(self):
         self._stdout.flush()
@@ -425,12 +427,13 @@ def cmd_setup(root: Path):
     report_dir.mkdir(exist_ok=True)
     report_path = report_dir / f"wpa-report-{stamp}.txt"
     report_file = open(report_path, "w", encoding="utf-8")
-    sys.stdout = _Tee(report_file)
+    tee = _Tee(report_file)
+    sys.stdout = tee
 
     try:
         _cmd_setup_inner(root)
     finally:
-        sys.stdout = report_file._stdout
+        sys.stdout = tee._stdout
         report_file.close()
 
     print(f"\n  Report saved: {report_path}")
