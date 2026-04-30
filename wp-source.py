@@ -660,15 +660,20 @@ def cmd_disk(root: Path):
     print(f"    ~{format_size(themes_sz + plugins_sz + mu_sz)}  (before removing stock items)\n")
 
 
+def _sanitize(s: str) -> str:
+    return s.encode("utf-8", errors="replace").decode("utf-8")
+
+
 def cmd_gitignore(root: Path, extra_ignores: list[str] | None = None):
     gitignore_path = root / ".gitignore"
-    content = build_gitignore(root, extra_ignores or [])
+    clean_ignores = [_sanitize(p) for p in (extra_ignores or [])]
+    content = build_gitignore(root, clean_ignores)
 
     if gitignore_path.exists():
-        if gitignore_path.read_text() == content:
+        if gitignore_path.read_text(errors="replace") == content:
             print("  .gitignore already up to date.")
             return
-        (root / ".gitignore.bak").write_text(gitignore_path.read_text())
+        (root / ".gitignore.bak").write_text(gitignore_path.read_text(errors="replace"))
         print("  Backed up existing .gitignore to .gitignore.bak")
 
     gitignore_path.write_text(content)
