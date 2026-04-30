@@ -25,7 +25,7 @@ SSH vào server, chạy một lệnh duy nhất:
 
 ```bash
 # Cài vĩnh viễn thành lệnh 'wpa' rồi chạy luôn
-curl -fsSL https://raw.githubusercontent.com/huytv35/wpa/main/install.sh | bash && wpa /var/www/html
+curl -fsSL https://raw.githubusercontent.com/huytv35/wpa/main/install.sh -o /tmp/wpa-install.sh && bash /tmp/wpa-install.sh && wpa /var/www/html
 ```
 
 Hoặc nếu không cần cài, **chạy thẳng không cần install**:
