@@ -421,7 +421,7 @@ def _test_ssh(host: str):
 def cmd_setup(root: Path):
     """Interactive guided flow: info → large-file scan → gitignore → remote → deploy key → push."""
     stamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-    report_dir = Path.cwd() / "wpa-reports"
+    report_dir = Path.cwd() / ".wpa-reports"
     report_dir.mkdir(exist_ok=True)
     report_path = report_dir / f"wpa-report-{stamp}.txt"
     report_file = open(report_path, "w", encoding="utf-8")
