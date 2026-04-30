@@ -14,11 +14,11 @@ else
     mkdir -p "$HOME/.local/bin"
 fi
 
-# Download
+# Download (< /dev/null tránh inner curl steal stdin khi chạy qua pipe)
 if command -v curl &>/dev/null; then
-    curl -fsSL "$RAW_URL" -o "$INSTALL_PATH"
+    curl -fsSL "$RAW_URL" -o "$INSTALL_PATH" < /dev/null
 elif command -v wget &>/dev/null; then
-    wget -qO "$INSTALL_PATH" "$RAW_URL"
+    wget -qO "$INSTALL_PATH" "$RAW_URL" < /dev/null
 else
     echo "Error: cần curl hoặc wget" >&2
     exit 1
