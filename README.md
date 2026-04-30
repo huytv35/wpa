@@ -25,18 +25,15 @@ SSH vào server, chạy một lệnh duy nhất:
 
 ```bash
 # Cài vĩnh viễn thành lệnh 'wpa' rồi chạy luôn
-bash <(curl -fsSL https://raw.githubusercontent.com/YOURUSER/YOURREPO/main/install.sh) && wpa /var/www/html
+bash <(curl -fsSL https://raw.githubusercontent.com/huytv35/wpa/main/install.sh) && wpa /var/www/html
 ```
 
 Hoặc nếu không cần cài, **chạy thẳng không cần install**:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/YOURUSER/YOURREPO/main/wp-source.py -o /tmp/wpa.py \
+curl -fsSL https://raw.githubusercontent.com/huytv35/wpa/main/wp-source.py -o /tmp/wpa.py \
   && python3 /tmp/wpa.py /var/www/html
 ```
-
-> Thay `YOURUSER/YOURREPO` bằng đường dẫn repo GitHub/GitLab thực của bạn.  
-> Xem mục **[Hosting script](#hosting-script)** bên dưới để biết cách push lên.
 
 ---
 
